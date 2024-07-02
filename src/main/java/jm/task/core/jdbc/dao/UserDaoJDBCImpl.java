@@ -15,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public UserDaoJDBCImpl() {
         try {
-            statement = Util.Instance().createStatement();
+            statement = Util.getConnection().createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

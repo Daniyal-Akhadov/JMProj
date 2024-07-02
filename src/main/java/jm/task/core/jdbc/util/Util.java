@@ -1,5 +1,9 @@
 package jm.task.core.jdbc.util;
 
+import jm.task.core.jdbc.model.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -13,15 +17,29 @@ import java.util.Properties;
 public class Util {
     // реализуйте настройку соеденения с БД
 
-    private static Connection instance;
+    private static Connection connection;
+    private static SessionFactory sessionFactory;
 
-    public static Connection Instance() {
-        return instance == null ? ConnectBaseData() : instance;
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory == null ?
+                connectBaseDataHibernate() : sessionFactory;
     }
 
-    private static Connection ConnectBaseData() {
-        if (instance != null) {
-            return instance;
+    public static Connection getConnection() {
+        return connection == null ?
+                connectBaseDataJDBC() : connection;
+    }
+
+    private static SessionFactory connectBaseDataHibernate() {
+        return new Configuration()
+                .configure("hibernate.config.xml")
+                .addAnnotatedClass(User.class)
+                .buildSessionFactory();
+    }
+
+    private static Connection connectBaseDataJDBC() {
+        if (connection != null) {
+            return connection;
         }
 
         final String CONFIGURATION_PATHS = "src/main/java/jm/task/core/jdbc/Configuration";
@@ -39,7 +57,7 @@ public class Util {
             final String username = props.getProperty(USERNAME_KEY);
             final String password = props.getProperty(PASSWORD_KEY);
 
-            return instance = DriverManager.getConnection(url, username, password);
+            return connection = DriverManager.getConnection(url, username, password);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }

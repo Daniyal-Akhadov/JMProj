@@ -1,31 +1,32 @@
 package jm.task.core.jdbc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Table
+@Entity
+@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
-    private String lastName;
+    @Column(name = "surname")
+    private String surname;
 
-    @Column
-    private Byte age;
+    @Column(name = "old")
+    private Byte old;
 
     public User() {
 
     }
 
-    public User(String name, String lastName, Byte age) {
+    public User(String name, String surname, Byte old) {
         this.name = name;
-        this.lastName = lastName;
-        this.age = age;
+        this.surname = surname;
+        this.old = old;
     }
 
     public Long getId() {
@@ -44,20 +45,20 @@ public class User {
         this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public Byte getAge() {
-        return age;
+    public Byte getOld() {
+        return old;
     }
 
-    public void setAge(Byte age) {
-        this.age = age;
+    public void setOld(Byte old) {
+        this.old = old;
     }
 
     @Override
@@ -65,8 +66,8 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
+                ", lastName='" + surname + '\'' +
+                ", old=" + old +
                 '}';
     }
 }
